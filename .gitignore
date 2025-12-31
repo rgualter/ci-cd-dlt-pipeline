@@ -9,6 +9,9 @@ scratch/**
 !scratch/README.md
 **/explorations/**
 **/!explorations/README.md
+scripts/temp.py
+scripts/temp.ipynb
+notebooks/notebook_1.ipynb
 
 # Testing
 .pytest_cache/
