@@ -1,0 +1,23 @@
+.databricks/
+build/
+dist/
+__pycache__/
+*.egg-info
+.venv/
+.venv_spark/
+scratch/**
+!scratch/README.md
+**/explorations/**
+**/!explorations/README.md
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
