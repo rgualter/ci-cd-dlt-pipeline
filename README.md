@@ -2,7 +2,7 @@
 
 Welcome to the **Citibike PySpark DLT Pipeline** project. This repository contains a production-ready data engineering pipeline built using **Databricks Asset Bundles (DABs)**, **Delta Live Tables (DLT)**, and **PySpark**.
 
-## 📂 Project Structure
+## Project Structure
 
 *   `src/`: Shared Python libraries and utilities.
 *   `citibike_etl/`: ETL logic (DLT pipelines, notebooks, and scripts).
@@ -10,7 +10,7 @@ Welcome to the **Citibike PySpark DLT Pipeline** project. This repository contai
 *   `tests/`: Unit and integration tests.
 *   `fixtures/`: Test data samples.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 *   **Python 3.12** (Required for Databricks Runtime 16.4 compatibility)
@@ -54,9 +54,11 @@ Authenticate to your workspace:
 databricks configure
 ```
 
-## 📦 Deployment & CI/CD
+## Deployment & CI/CD
+
 
 This project uses **Databricks Asset Bundles** for deployment.
+
 
 | Environment | Target | Command | Description |
 | :--- | :--- | :--- | :--- |
@@ -69,6 +71,6 @@ To manually trigger the pipeline after deployment:
 databricks bundle run --target dev
 ```
 
-## 📚 Resources
+## Resources
 *   [Databricks Asset Bundles Documentation](https://docs.databricks.com/dev-tools/bundles/index.html)
 *   [Delta Live Tables Documentation](https://docs.databricks.com/data-engineering/delta-live-tables/index.html)
