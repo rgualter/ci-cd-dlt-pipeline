@@ -42,8 +42,12 @@ targets:
       dev_flag:
         default: false
     permissions:
-      - user_name: gualterazure@proton.me #dbadmin@gualterazureproton.onmicrosoft.com
+      #- user_name: gualterazure@proton.me #dbadmin@gualterazureproton.onmicrosoft.com
+      #  level: CAN_MANAGE
+      - service_principal_name: 0efb1db5-fdcb-463a-8d8e-6fdfa20000bc
         level: CAN_MANAGE
+    run_as:
+      service_principal_name: 0efb1db5-fdcb-463a-8d8e-6fdfa20000bc
 
   prod:
     mode: production
@@ -57,5 +61,9 @@ targets:
       dev_flag:
         default: false
     permissions:
-      - user_name: gualterazure@proton.me #dbadmin@gualterazureproton.onmicrosoft.com
+      #- user_name: gualterazure@proton.me #dbadmin@gualterazureproton.onmicrosoft.com
+      #  level: CAN_MANAGE
+      - service_principal_name: 0554cd41-76ac-4940-92f0-ec5cb6c4677b
         level: CAN_MANAGE
+    run_as:
+      service_principal_name: 0554cd41-76ac-4940-92f0-ec5cb6c4677b
