@@ -2,6 +2,10 @@
 
 Welcome to the **Citibike PySpark DLT Pipeline** project. This repository contains a production-ready data engineering pipeline built using **Databricks Asset Bundles (DABs)**, **Delta Live Tables (DLT)**, and **PySpark**.
 
+## Architecture 
+
+![alt text](/.doc/cicd-workflow.png)
+
 ## Project Structure
 
 *   `src/`: Shared Python libraries and utilities.
