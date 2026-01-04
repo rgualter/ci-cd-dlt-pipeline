@@ -4,7 +4,7 @@ Welcome to the **Citibike PySpark DLT Pipeline** project. This repository contai
 
 ## Architecture 
 
-![alt text](/.doc/cicd-workflow.png)
+![alt text](/docs/images/cicd-workflow.png)
 
 ## Project Structure
 
