@@ -1,18 +1,34 @@
-# Citibike PySpark DLT Pipeline
+# Databricks PySpark ETL Pipelines
 
-Welcome to the **Citibike PySpark DLT Pipeline** project. This repository contains a production-ready data engineering pipeline built using **Databricks Asset Bundles (DABs)**, **Delta Live Tables (DLT)**, and **PySpark**.
+Welcome to the **Databricks PySpark ETL Pipelines** project. This repository contains production-ready data engineering pipelines built using **Databricks Asset Bundles (DABs)**, **Delta Live Tables (DLT)**, and **PySpark**.
 
 ## Architecture 
+
+The project follows a modern CI/CD workflow for Databricks:
 
 ![alt text](/docs/images/cicd-workflow.png)
 
 ## Project Structure
 
-*   `src/`: Shared Python libraries and utilities.
-*   `citibike_etl/`: ETL logic (DLT pipelines, notebooks, and scripts).
+*   `citibike_etl/`: ETL logic for NYC Citibike data (DLT pipelines, notebooks, and scripts).
+*   `formula_1_etl/`: Ingestion notebooks for Formula 1 historical data.
+*   `src/`: Shared Python libraries and utilities used across pipelines.
 *   `resources/`: Databricks Job and Pipeline configurations (YAML).
-*   `tests/`: Unit and integration tests.
+*   `tests/`: Unit and integration tests for shared utilities.
 *   `fixtures/`: Test data samples.
+
+## Pipelines
+
+### 1. Citibike NYC Pipeline (DLT)
+A Delta Live Tables pipeline that processes NYC Citibike trip data through Bronze, Silver, and Gold layers.
+- **Key Features**: Auto-scaling, data quality expectations, and seamless transition between layers.
+- **Location**: `citibike_etl/`
+
+### 2. Formula 1 historical data (Notebooks)
+A set of comprehensive ingestion notebooks that process 70+ years of Formula 1 data.
+- **Components**: 8 specialized notebooks ingesting:
+  - Circuits, Races, Constructors, Drivers, Results, Pit Stops, Lap Times, and Qualifying data.
+- **Location**: `formula_1_etl/notebooks/`
 
 ## Getting Started
 
@@ -23,32 +39,20 @@ Welcome to the **Citibike PySpark DLT Pipeline** project. This repository contai
 
 ### 1. Local Environment Setup
 
-We use two separate environments to avoid dependency conflicts: one for **Unit Testing (Local PySpark)** and one for **Databricks Connect**.
+We use separate environments to avoid dependency conflicts:
 
 #### Option A: Local PySpark (For Running Tests)
-Use this environment to run unit tests locally without connecting to Databricks.
-
 ```bash
-# Create and activate virtual environment
 python3.12 -m venv .venv_pyspark
 source .venv_pyspark/bin/activate
-
-# Install dependencies
 pip install -r requirements-pyspark.txt
-
-# Run Tests
 pytest
 ```
 
 #### Option B: Databricks Connect (For Remote Execution)
-Use this environment to develop and run code against your remote Databricks workspace.
-
 ```bash
-# Create and activate virtual environment
 python3.12 -m venv .venv_dbc
 source .venv_dbc/bin/activate
-
-# Install dependencies
 pip install -r requirements-dbc.txt
 ```
 
@@ -60,9 +64,7 @@ databricks configure
 
 ## Deployment & CI/CD
 
-
 This project uses **Databricks Asset Bundles** for deployment.
-
 
 | Environment | Target | Command | Description |
 | :--- | :--- | :--- | :--- |
@@ -70,7 +72,7 @@ This project uses **Databricks Asset Bundles** for deployment.
 | **Production** | `prod` | `databricks bundle deploy --target prod` | Deploys release version. Schedules active. |
 
 ### Running the Pipeline
-To manually trigger the pipeline after deployment:
+To manually trigger the Citibike DLT pipeline after deployment:
 ```bash
 databricks bundle run --target dev
 ```
