@@ -1,3 +1,8 @@
+"""
+Unit tests for Formula 1 utility functions.
+These tests verify data manipulation helpers used across the F1 ETL pipelines.
+"""
+
 from src.formula1.formula1_utils import (
     add_ingestion_date,
     re_arrange_partition_column,
@@ -6,6 +11,13 @@ from src.formula1.formula1_utils import (
 
 
 def test_add_ingestion_date(spark):
+    """
+    Tests if add_ingestion_date correctly adds an 'ingestion_date' column.
+
+    Expected behavior:
+    - The output DataFrame should contain a column named 'ingestion_date'.
+    - The row count remains the same.
+    """
     data = [("James", 34), ("Anna", 28)]
     schema = ["name", "age"]
     df = spark.createDataFrame(data, schema)
@@ -17,6 +29,12 @@ def test_add_ingestion_date(spark):
 
 
 def test_re_arrange_partition_column(spark):
+    """
+    Tests if re_arrange_partition_column moves the specified column to the end.
+
+    Expected behavior:
+    - The partition column (e.g., 'age') should be the last column in the schema.
+    """
     data = [("James", 34, "New York"), ("Anna", 28, "Los Angeles")]
     schema = ["name", "age", "city"]
     df = spark.createDataFrame(data, schema)
@@ -28,6 +46,13 @@ def test_re_arrange_partition_column(spark):
 
 
 def test_df_column_to_list(spark):
+    """
+    Tests if df_column_to_list extracts distinct values from a column into a list.
+
+    Expected behavior:
+    - The resulting list contains all unique values from the column.
+    - The length of the list matches the number of unique elements.
+    """
     data = [("Red",), ("Blue",), ("Red",), ("Green",)]
     schema = ["color"]
     df = spark.createDataFrame(data, schema)
