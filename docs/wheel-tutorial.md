@@ -141,6 +141,8 @@ setup(
 )
 ```
 
+**Note**: Use `semver` practices. If your current version is `0.0.5`, update to `0.0.6` for patches.
+
 #### 3. Clean Previous Build Artifacts
 
 ```bash
@@ -166,6 +168,9 @@ ls -la dist/
 # Inspect wheel contents
 unzip -l dist/dab_project-0.0.6-py3-none-any.whl
 ```
+
+> [!TIP]
+> Always check the file list to ensure your new files (e.g., `src/new_module.py`) are actually included. If they are missing, check your `packages` discovery in `setup.py` or `MANIFEST.in`.
 
 #### 6. Test the Wheel Locally
 

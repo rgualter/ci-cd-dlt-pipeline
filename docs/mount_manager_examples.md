@@ -2,6 +2,13 @@
 
 This document provides real-world usage scenarios for the `ADLSMountManager` class.
 
+## Prerequisites
+
+Ensure you have configured your Key Vault scopes and secrets before attempting to mount containers. See the [main README](../README.md) for details.
+
+---
+
+
 ## Basic Usage
 
 ```python

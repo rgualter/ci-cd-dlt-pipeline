@@ -6,29 +6,70 @@ Welcome to the **Databricks PySpark ETL Pipelines** project. This repository con
 
 The project follows a modern CI/CD workflow for Databricks:
 
-![alt text](/docs/images/cicd-workflow.png)
+![CI/CD Workflow](/docs/images/cicd-workflow.png)
 
 ## Project Structure
 
-*   `citibike_etl/`: ETL logic for NYC Citibike data (DLT pipelines, notebooks, and scripts).
-*   `formula_1_etl/`: Ingestion logic for Formula 1 historical data using the Medallion Architecture.
-*   `src/`: Shared Python libraries and specialized packages (e.g., `formula1`, `citibike`).
-*   `resources/`: Databricks Job and Pipeline configurations (YAML).
-*   `tests/`: Unit and integration tests for shared utilities and logic.
-*   `fixtures/`: Test data samples for local validation.
+```
+dab_project/
+├── citibike_etl/               # NYC Citibike DLT pipeline
+│   ├── dlt/                    # Delta Live Tables notebooks
+│   │   ├── 01_bronze/          # Raw data ingestion
+│   │   ├── 02_silver/          # Cleaned & enriched data
+│   │   └── 03_gold/            # Business aggregations
+│   ├── notebooks/              # Utility notebooks
+│   └── scripts/                # Python scripts (e.g. entrypoints)
+│
+├── formula_1_etl/              # Formula 1 Medallion Architecture
+│   └── notebooks/
+│       ├── 01_bronze/          # 8 ingestion notebooks (CSV/JSON → Parquet)
+│       ├── 02_silver/          # 8 transformation notebooks
+│       └── 03_gold/            # 3 presentation notebooks
+│
+├── src/                        # Shared Python libraries
+│   ├── formula1/               # Formula 1 constants & utilities
+│   ├── citibike/               # Citibike utilities
+│   └── utils/                  # Generic utilities
+│       ├── container_cleaner.py  # ADLS/Volume cleanup utility
+│       ├── mount_manager.py      # ADLS mount management
+│       └── datetime_utils.py     # Date/time helpers
+│
+├── resources/                  # Databricks Job/Pipeline configs (YAML)
+├── tests/                      # Unit tests (pytest)
+├── fixtures/                   # Test data samples
+├── docs/                       # Project documentation
+│   ├── formula1-etl.md         # Formula 1 pipeline details
+│   ├── citibike-etl.md         # Citibike DLT pipeline details
+│   ├── mount_manager_examples.md  # Mount utility usage
+│   └── wheel-tutorial.md       # Wheel packaging guide
+│
+├── .github/workflows/          # CI/CD pipelines
+│   ├── ci-workflow.yml         # Continuous Integration
+│   └── cd-workflow.yml         # Continuous Deployment
+│
+└── databricks.yml              # Databricks Asset Bundle config
+```
 
 ## Pipelines
 
 ### 1. Citibike NYC Pipeline (DLT)
 A Delta Live Tables pipeline that processes NYC Citibike trip data through Bronze, Silver, and Gold layers.
-- **Key Features**: Auto-scaling, data quality expectations, and seamless transition between layers.
-- **Location**: `citibike_etl/`
+- **Key Features**: Auto-scaling, data quality expectations, seamless layer transitions
+- **Gold Outputs**: Daily ride summaries, station performance metrics
+- **Location**: [`citibike_etl/`](./citibike_etl/)
+- **Documentation**: [Citibike ETL Documentation](./docs/citibike-etl.md)
 
-### 2. Formula 1 historical data
-A set of comprehensive ingestion notebooks that process 70+ years of Formula 1 data, organized by layer.
-- **Components**: 8 specialized notebooks ingesting:
-  - Circuits, Races, Constructors, Drivers, Results, Pit Stops, Lap Times, and Qualifying data.
-- **Location**: `formula_1_etl/notebooks/02_silver/`
+### 2. Formula 1 Historical Data Pipeline
+A comprehensive ETL pipeline that processes 70+ years of Formula 1 historical data using the Medallion Architecture.
+
+| Layer | Notebooks | Description |
+| :--- | :--- | :--- |
+| **Bronze** | 8 notebooks | Raw ingestion from CSV/JSON to Parquet |
+| **Silver** | 8 notebooks | Data cleansing, standardization, renaming |
+| **Gold** | 3 notebooks | Race results, driver standings, constructor standings |
+
+- **Location**: [`formula_1_etl/notebooks/`](./formula_1_etl/notebooks/)
+- **Documentation**: [Formula 1 ETL Documentation](./docs/formula1-etl.md)
 
 ## Getting Started
 
@@ -108,3 +149,5 @@ pytest
 *   [Python Wheel Tutorial](./docs/wheel-tutorial.md) - How to build and update wheel packages
 *   [Citibike ETL Documentation](./docs/citibike-etl.md) - NYC Citibike DLT pipeline architecture
 *   [Formula 1 ETL Documentation](./docs/formula1-etl.md) - Formula 1 data processing pipeline
+*   [Mount Manager Examples](./docs/mount_manager_examples.md) - ADLS Mount Manager usage
+*   [Container Cleaner Examples](./docs/container_cleaner_examples.md) - ADLS/Volume cleanup utility usage
