@@ -4,16 +4,23 @@ This document describes the ETL pipeline that processes historical Formula 1 rac
 
 ---
 
+## Prerequisites
+
+Before running this pipeline, ensure you have set up your local environment and authenticated via the Databricks CLI. See the [main README](../README.md#getting-started) for setup instructions.
+
+---
+
+
 ## Architecture Overview
 
 ```mermaid
 flowchart LR
-    subgraph Landing["🗂️ Landing Zone"]
+    subgraph Landing["Landing Zone"]
         L1[("CSV Files")]
         L2[("JSON Files")]
     end
 
-    subgraph Bronze["🥉 Bronze Layer"]
+    subgraph Bronze["Bronze Layer"]
         B1["circuits"]
         B2["races"]
         B3["constructors"]
@@ -24,7 +31,7 @@ flowchart LR
         B8["qualifying"]
     end
 
-    subgraph Silver["🥈 Silver Layer"]
+    subgraph Silver["Silver Layer"]
         S1["circuits"]
         S2["races"]
         S3["constructors"]
@@ -77,10 +84,10 @@ The pipeline processes 8 distinct data sources covering 70+ years of Formula 1 r
 flowchart TB
     subgraph Storage["Storage Layers"]
         direction TB
-        L["📥 /mnt/gualterformula1dl/landing<br/>Original CSV/JSON files"]
-        R["🥉 /mnt/gualterformula1dl/raw<br/>Parquet (Bronze)"]
-        P["🥈 /mnt/gualterformula1dl/processed<br/>Parquet (Silver)"]
-        PR["🥇 /mnt/gualterformula1dl/presentation<br/>Parquet (Gold)"]
+        L["LANDING: /mnt/gualterformula1dl/landing<br/>Original CSV/JSON files"]
+        R["BRONZE: /mnt/gualterformula1dl/raw<br/>Parquet"]
+        P["SILVER: /mnt/gualterformula1dl/processed<br/>Parquet"]
+        PR["GOLD: /mnt/gualterformula1dl/presentation<br/>Parquet"]
     end
     
     L --> R --> P --> PR
@@ -90,7 +97,7 @@ flowchart TB
 
 ## Layer Details
 
-### 🥉 Bronze Layer (Raw)
+### Bronze Layer (Raw)
 
 **Purpose**: Ingest source files with minimal transformation, convert to Parquet, add ingestion metadata.
 
@@ -131,7 +138,7 @@ circuits_df.write.mode("overwrite").parquet(f"{raw_folder_path}/circuits")
 
 ---
 
-### 🥈 Silver Layer (Processed)
+### Silver Layer (Processed)
 
 **Purpose**: Clean, transform, and standardize data for analytics consumption.
 
@@ -164,22 +171,85 @@ flowchart LR
 
 ---
 
+### Gold Layer (Presentation)
+
+**Purpose**: Aggregated, business-level data ready for dashboards and reporting.
+
+**Location**: `/mnt/gualterformula1dl/presentation/`
+
+**Notebooks**: [formula_1_etl/notebooks/03_gold/](../formula_1_etl/notebooks/03_gold/)
+
+```mermaid
+flowchart LR
+    subgraph Gold["Gold Processing Steps"]
+        direction TB
+        G1["1. Race Results<br/>Join races, circuits, drivers, teams"]
+        G2["2. Driver Standings<br/>Aggregated points & wins by driver"]
+        G3["3. Constructor Standings<br/>Aggregated points & wins by team"]
+    end
+    
+    G1 --> G2
+    G1 --> G3
+```
+
+#### 1. Race Results
+**Notebook**: [1.race_results.ipynb](../formula_1_etl/notebooks/03_gold/1.race_results.ipynb)
+- **Input**: `races`, `circuits`, `drivers`, `constructors`, `results` (Silver)
+- **Transformation**: Joins all entities to create a comprehensive view of every race result.
+- **Output**: `race_results` (Presentation)
+
+#### 2. Driver Standings
+**Notebook**: [2.driver_standings.ipynb](../formula_1_etl/notebooks/03_gold/2.driver_standings.ipynb)
+- **Input**: `race_results` (Gold)
+- **Logic**: Groups by race year and driver, sums points, counts wins.
+- **Window Function**: Ranks drivers by total points (desc) and wins (desc).
+- **Output**: `driver_standings` (Presentation)
+
+#### 3. Constructor Standings
+**Notebook**: [3.constructor_standings.ipynb](../formula_1_etl/notebooks/03_gold/3.constructor_standings.ipynb)
+- **Input**: `race_results` (Gold)
+- **Logic**: Groups by race year and team, sums points, counts wins.
+- **Window Function**: Ranks teams by total points (desc) and wins (desc).
+- **Output**: `constructor_standings` (Presentation)
+
+
+---
+
 ## Data Entity Relationships
+
+The following diagram shows how the 8 Formula 1 data entities relate to each other:
 
 ```mermaid
 erDiagram
-    CIRCUITS ||--o{ RACES : hosts
-    RACES ||--o{ RESULTS : contains
-    RACES ||--o{ QUALIFYING : includes
-    RACES ||--o{ LAP_TIMES : records
-    RACES ||--o{ PIT_STOPS : tracks
-    DRIVERS ||--o{ RESULTS : achieves
-    DRIVERS ||--o{ QUALIFYING : participates
-    DRIVERS ||--o{ LAP_TIMES : sets
-    DRIVERS ||--o{ PIT_STOPS : makes
-    CONSTRUCTORS ||--o{ RESULTS : earns
-    CONSTRUCTORS ||--o{ DRIVERS : employs
+    CIRCUITS ||--o{ RACES : "hosts (1:N)"
+    RACES ||--o{ RESULTS : "contains (1:N)"
+    RACES ||--o{ QUALIFYING : "includes (1:N)"
+    RACES ||--o{ LAP_TIMES : "records (1:N)"
+    RACES ||--o{ PIT_STOPS : "tracks (1:N)"
+    DRIVERS ||--o{ RESULTS : "achieves (1:N)"
+    DRIVERS ||--o{ QUALIFYING : "participates (1:N)"
+    DRIVERS ||--o{ LAP_TIMES : "sets (1:N)"
+    DRIVERS ||--o{ PIT_STOPS : "makes (1:N)"
+    CONSTRUCTORS ||--o{ RESULTS : "earns (1:N)"
+    CONSTRUCTORS ||--o{ DRIVERS : "employs (1:N)"
 ```
+
+### Relationship Legend
+
+| Symbol | Meaning | Example |
+| :---: | :--- | :--- |
+| `\|\|--o{` | **One-to-Many (1:N)** | One circuit hosts many races |
+| `\|\|--\|\|` | **One-to-One (1:1)** | Not used in this model |
+| `}o--o{` | **Many-to-Many (N:M)** | Not used in this model |
+
+### Key Relationships Explained
+
+| Parent Entity | Child Entity | Relationship |
+| :--- | :--- | :--- |
+| **CIRCUITS** | RACES | A circuit can host multiple races over the years |
+| **RACES** | RESULTS, QUALIFYING, LAP_TIMES, PIT_STOPS | Each race has multiple participants with results, qualifying times, lap records, and pit stops |
+| **DRIVERS** | RESULTS, QUALIFYING, LAP_TIMES, PIT_STOPS | A driver participates in many races throughout their career |
+| **CONSTRUCTORS** | RESULTS, DRIVERS | Teams earn results across races and employ multiple drivers |
 
 ---
 
@@ -211,6 +281,14 @@ erDiagram
 | [7.ingest_lap_times_file.ipynb](../formula_1_etl/notebooks/02_silver/7.ingest_lap_times_file.ipynb) | raw/lap_times/ | processed/lap_times/ |
 | [8.ingest_qualifying_file.ipynb](../formula_1_etl/notebooks/02_silver/8.ingest_qualifying_file.ipynb) | raw/qualifying/ | processed/qualifying/ |
 
+### Gold Layer Notebooks
+
+| Notebook | Input | Output |
+| :--- | :--- | :--- |
+| [1.race_results.ipynb](../formula_1_etl/notebooks/03_gold/1.race_results.ipynb) | processed/* | presentation/race_results |
+| [2.driver_standings.ipynb](../formula_1_etl/notebooks/03_gold/2.driver_standings.ipynb) | presentation/race_results | presentation/driver_standings |
+| [3.constructor_standings.ipynb](../formula_1_etl/notebooks/03_gold/3.constructor_standings.ipynb) | presentation/race_results | presentation/constructor_standings |
+
 ---
 
 ## Shared Utilities
@@ -235,6 +313,10 @@ presentation_folder_path = "/mnt/gualterformula1dl/presentation"  # Gold
 | `overwrite_partition(df, db, table, col)` | Dynamic partition overwrite for incremental loads |
 | `df_column_to_list(df, col)` | Extracts distinct column values to Python list |
 
+### Clean-up Utilities
+
+For resetting the environment (clearing containers), see the [Container Cleaner Documentation](./container_cleaner_examples.md).
+
 ---
 
 ## Running the Pipeline
@@ -256,7 +338,7 @@ dbutils.notebook.run("./2.bronze_races", 0, {"p_data_source": "ergast"})
 # Deploy resources
 databricks bundle deploy --target dev
 
-# Run ingestion job
+# Run ingestion job (Development)
 databricks bundle run formula1_ingestion_job --target dev
 ```
 

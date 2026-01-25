@@ -4,6 +4,13 @@ This document describes the **Delta Live Tables (DLT)** pipeline that processes 
 
 ---
 
+## Prerequisites
+
+Before running this pipeline, ensure you have set up your local environment and authenticated via the Databricks CLI. See the [main README](../README.md#getting-started) for setup instructions.
+
+---
+
+
 ## Architecture Overview
 
 ```mermaid
@@ -185,8 +192,11 @@ flowchart TB
 # Deploy the DLT pipeline
 databricks bundle deploy --target dev
 
-# Run the pipeline
+# Run the pipeline (Development Mode)
 databricks bundle run citibike_dlt_pipeline --target dev
+
+# Run the pipeline (Production Mode)
+# databricks bundle run citibike_dlt_pipeline --target prod
 ```
 
 ---
