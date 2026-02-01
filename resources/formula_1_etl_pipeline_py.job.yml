@@ -13,6 +13,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_races
           spark_python_task:
@@ -23,6 +25,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_constructors
           spark_python_task:
@@ -33,6 +37,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_drivers
           spark_python_task:
@@ -43,6 +49,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_results
           spark_python_task:
@@ -53,6 +61,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_pit_stops
           spark_python_task:
@@ -63,6 +73,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_lap_times
           spark_python_task:
@@ -73,6 +85,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_qualifying
           spark_python_task:
@@ -83,6 +97,8 @@ resources:
               - "{{task.run_id}}"
               - "{{job.start_time.iso_datetime}}"
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         # Silver Layer Tasks
         - task_key: 02_silver_circuits
@@ -92,6 +108,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/01_silver_circuits.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_races
           depends_on:
@@ -100,6 +118,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/02_silver_races.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_constructors
           depends_on:
@@ -108,6 +128,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/03_silver_constructors.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_drivers
           depends_on:
@@ -116,6 +138,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/04_silver_drivers.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_results
           depends_on:
@@ -124,6 +148,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/05_silver_results.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_pit_stops
           depends_on:
@@ -132,6 +158,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/06_silver_pit_stops.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_lap_times
           depends_on:
@@ -140,6 +168,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/07_silver_lap_times.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_qualifying
           depends_on:
@@ -148,6 +178,8 @@ resources:
             python_file: ../formula_1_etl/scripts/02_silver/08_silver_qualifying.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         # Gold Layer Tasks
         - task_key: 03_gold_race_results
@@ -161,6 +193,8 @@ resources:
             python_file: ../formula_1_etl/scripts/03_gold/01_gold_race_results.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 03_gold_driver_standings
           depends_on:
@@ -169,6 +203,8 @@ resources:
             python_file: ../formula_1_etl/scripts/03_gold/02_gold_driver_standings.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 03_gold_constructor_standings
           depends_on:
@@ -177,6 +213,8 @@ resources:
             python_file: ../formula_1_etl/scripts/03_gold/03_gold_constructor_standings.py
             parameters:
               - "${var.catalog}"
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
       job_clusters:
         - job_cluster_key: standard_d4s_v3_cluster_id

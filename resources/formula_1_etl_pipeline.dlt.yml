@@ -1,6 +1,6 @@
 resources:
   pipelines:
-    pipeline_formula_1_etl:
+    formula_1_etl_pipeline:
       name: formula_1_etl_pipeline
       configuration:
         catalog: "${var.catalog}"
