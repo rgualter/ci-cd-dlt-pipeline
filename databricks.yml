@@ -40,7 +40,7 @@ targets:
     workspace:
       profile: test
       # We explicitly deploy to /Workspace/Users/dbadmin@gualterazureproton.onmicrosoft.com to make sure we only have a single copy.
-      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+      root_path: /Workspace/Users/dbadmin@gualterazureproton.onmicrosoft.com/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog:
         default: "citibike_test"
@@ -59,7 +59,7 @@ targets:
     workspace:
       profile: prod
       # We explicitly deploy to /Workspace/Users/dbadmin@gualterazureproton.onmicrosoft.com to make sure we only have a single copy.
-      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+      root_path: /Workspace/Users/dbadmin@gualterazureproton.onmicrosoft.com/.bundle/${bundle.name}/${bundle.target}
     variables:
       catalog:
         default: "citibike_prod"
