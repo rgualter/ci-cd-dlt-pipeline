@@ -1,0 +1,18 @@
+resources:
+  pipelines:
+    pipeline_formula_1_etl:
+      name: formula_1_etl_pipeline
+      configuration:
+        catalog: "${var.catalog}"
+      libraries:
+        - notebook:
+            path: ../formula_1_etl/dlt/01_bronze/01_bronze_formula1.ipynb
+        - notebook:
+            path: ../formula_1_etl/dlt/02_silver/02_silver_formula1.ipynb
+        - notebook:
+            path: ../formula_1_etl/dlt/03_gold/03_gold_formula1.ipynb
+      schema: f1_dlt
+      development: "${var.dev_flag}"
+      photon: true
+      catalog: "${var.catalog}"
+      serverless: true

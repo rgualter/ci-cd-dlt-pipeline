@@ -52,15 +52,19 @@ dab_project/
 
 ## Pipelines
 
-### 1. Citibike NYC Pipeline (DLT)
-A Delta Live Tables pipeline that processes NYC Citibike trip data through Bronze, Silver, and Gold layers.
+### 1. Citibike NYC Pipeline
+A comprehensive pipeline that processes NYC Citibike trip data through Bronze, Silver, and Gold layers.
+- **Implementations**:
+  - **Delta Live Tables (DLT)**: Declarative, auto-scaling pipeline.
+  - **Standard Notebooks**: Interactive/orchestrated workflow.
+  - **Python Scripts**: Modular, testable production code.
 - **Key Features**: Auto-scaling, data quality expectations, seamless layer transitions
 - **Gold Outputs**: Daily ride summaries, station performance metrics
 - **Location**: [`citibike_etl/`](./citibike_etl/)
 - **Documentation**: [Citibike ETL Documentation](./docs/citibike-etl.md)
 
 ### 2. Formula 1 Historical Data Pipeline
-A comprehensive ETL pipeline that processes 70+ years of Formula 1 historical data using the Medallion Architecture.
+A comprehensive ETL pipeline that processes 70+ years of Formula 1 historical data using the Medallion Architecture. it supports three implementation patterns: Notebooks, DLT, and Python Scripts.
 
 | Layer | Notebooks | Description |
 | :--- | :--- | :--- |
@@ -114,19 +118,32 @@ This project uses **Databricks Asset Bundles** for deployment.
 
 ### Running Pipelines
 
-#### Citibike DLT Pipeline
-To trigger the NYC Citibike Delta Live Tables pipeline:
+### Running Pipelines
+
+#### Citibike Pipeline
+To trigger the NYC Citibike pipeline:
 ```bash
-databricks bundle run --target dev
+# 1. Run Standard Notebook Pipeline
+databricks bundle run citibike_etl_pipeline_nb --target dev
+
+# 2. Run Python Scripts Pipeline
+databricks bundle run citibike_etl_pipeline_py --target dev
+
+# 3. Run Delta Live Tables Pipeline
+databricks bundle run citibike_dlt_pipeline --target dev
 ```
 
-#### Formula 1 Ingestion
-To run the Formula 1 ingestion notebooks sequentially:
-1. Deploy the bundle resources.
-2. Trigger the job (recommended) or run the orchestrator notebook.
+#### Formula 1 Pipeline
+To run the Formula 1 ingestion pipeline:
 ```bash
-# Example if using the bundle job (recommended for production)
-databricks bundle run formula1_ingestion_job
+# 1. Run Standard Notebook Pipeline
+databricks bundle run formula_1_etl_pipeline_nb --target dev
+
+# 2. Run Python Scripts Pipeline
+databricks bundle run formula_1_etl_pipeline_py --target dev
+
+# 3. Run Delta Live Tables Pipeline
+databricks bundle run formula_1_etl_pipeline --target dev
 ```
 
 ## Testing

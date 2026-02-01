@@ -1,6 +1,9 @@
 # Citibike NYC ETL Pipeline
 
-This document describes the **Delta Live Tables (DLT)** pipeline that processes NYC Citibike trip data through the Medallion Architecture.
+This document describes the ETL pipeline that processes NYC Citibike trip data through the Medallion Architecture. The pipeline supports three implementation patterns:
+1.  **Delta Live Tables (DLT)** (Declarative/streaming)
+2.  **Standard PySpark Notebooks** (Interactive/orchestrated)
+3.  **Python Scripts** (Modular/testable)
 
 ---
 
@@ -186,17 +189,40 @@ flowchart TB
 
 ---
 
+## Alternative Implementations
+
+### Standard Notebooks
+
+The standard notebook implementation uses Dagster-style orchestration via Databricks Workflows.
+
+**Configuration**: [`resources/citibike_etl_pipeline_nb.job.yml`](../resources/citibike_etl_pipeline_nb.job.yml)
+
+**Location**: [`citibike_etl/notebooks/`](../citibike_etl/notebooks/)
+
+### Python Scripts
+
+The Python Scripts implementation moves logic out of notebooks into proper Python modules.
+
+**Configuration**: [`resources/citibike_etl_pipeline_py.job.yml`](../resources/citibike_etl_pipeline_py.job.yml)
+
+**Location**: [`citibike_etl/scripts/`](../citibike_etl/scripts/)
+
+---
+
 ## Running the Pipeline
 
 ```bash
-# Deploy the DLT pipeline
+# Deploy resources
 databricks bundle deploy --target dev
 
-# Run the pipeline (Development Mode)
-databricks bundle run citibike_dlt_pipeline --target dev
+# 1. Run Standard Notebook Pipeline
+databricks bundle run citibike_etl_pipeline_nb --target dev
 
-# Run the pipeline (Production Mode)
-# databricks bundle run citibike_dlt_pipeline --target prod
+# 2. Run Python Scripts Pipeline
+databricks bundle run citibike_etl_pipeline_py --target dev
+
+# 3. Run Delta Live Tables Pipeline
+databricks bundle run citibike_dlt_pipeline --target dev
 ```
 
 ---

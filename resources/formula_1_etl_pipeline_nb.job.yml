@@ -1,0 +1,204 @@
+resources:
+  jobs:
+    formula_1_etl_pipeline_nb:
+      name: formula_1_etl_pipeline_nb
+      tasks:
+        # Bronze Layer Tasks
+        - task_key: 01_bronze_circuits
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/1.ingest_circuits_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_races
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/2.ingest_races_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_constructors
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/3.ingest_constructors_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_drivers
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/4.ingest_drivers_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_results
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/5.ingest_results_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_pit_stops
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/6.ingest_pit_stops_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_lap_times
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/7.ingest_lap_times_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 01_bronze_qualifying
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/01_bronze/8.ingest_qualifying_file.ipynb
+            base_parameters:
+              pipeline_id: "{{job.id}}"
+              run_id: "{{job.run_id}}"
+              task_id: "{{task.run_id}}"
+              processed_timestamp: "{{job.start_time.iso_datetime}}"
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        # Silver Layer Tasks - depend on all bronze
+        - task_key: 02_silver_circuits
+          depends_on:
+            - task_key: 01_bronze_circuits
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/1.process_circuits.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_races
+          depends_on:
+            - task_key: 01_bronze_races
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/2.process_races.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_constructors
+          depends_on:
+            - task_key: 01_bronze_constructors
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/3.process_constructors.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_drivers
+          depends_on:
+            - task_key: 01_bronze_drivers
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/4.process_drivers.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_results
+          depends_on:
+            - task_key: 01_bronze_results
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/5.process_results.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_pit_stops
+          depends_on:
+            - task_key: 01_bronze_pit_stops
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/6.process_pit_stops.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_lap_times
+          depends_on:
+            - task_key: 01_bronze_lap_times
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/7.process_lap_times.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 02_silver_qualifying
+          depends_on:
+            - task_key: 01_bronze_qualifying
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/02_silver/8.process_qualifying.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        # Gold Layer Tasks - depend on all silver
+        - task_key: 03_gold_race_results
+          depends_on:
+            - task_key: 02_silver_circuits
+            - task_key: 02_silver_races
+            - task_key: 02_silver_constructors
+            - task_key: 02_silver_drivers
+            - task_key: 02_silver_results
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/03_gold/1.race_results.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 03_gold_driver_standings
+          depends_on:
+            - task_key: 03_gold_race_results
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/03_gold/2.driver_standings.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+        - task_key: 03_gold_constructor_standings
+          depends_on:
+            - task_key: 03_gold_race_results
+          notebook_task:
+            notebook_path: ../formula_1_etl/notebooks/03_gold/3.constructor_standings.ipynb
+            base_parameters:
+              catalog: "${var.catalog}"
+            source: WORKSPACE
+          job_cluster_key: standard_d4s_v3_cluster_id
+      job_clusters:
+        - job_cluster_key: standard_d4s_v3_cluster_id
+          new_cluster: "${var.standard_d4s_v3_cluster_id}"
+      queue:
+        enabled: true
