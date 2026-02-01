@@ -1,6 +1,9 @@
 # Formula 1 ETL Pipeline
 
-This document describes the ETL pipeline that processes historical Formula 1 racing data through the Medallion Architecture using PySpark notebooks.
+This document describes the ETL pipeline that processes historical Formula 1 racing data through the Medallion Architecture. The pipeline supports three implementation patterns:
+1.  **Standard PySpark Notebooks** (Interactive/orchestrated)
+2.  **Delta Live Tables (DLT)** (Declarative/streaming)
+3.  **Python Scripts** (Modular/testable)
 
 ---
 
@@ -291,6 +294,30 @@ erDiagram
 
 ---
 
+## Alternative Implementations
+
+### Delta Live Tables (DLT)
+
+The DLT implementation provides a declarative approach to defining the pipeline, automatically managing dependencies and infrastructure.
+
+**Configuration**: [`resources/formula_1_etl_pipeline.dlt.yml`](../resources/formula_1_etl_pipeline.dlt.yml)
+
+**Pipeline Code**:
+*   **Bronze**: [`formula_1_etl/dlt/01_bronze/`](../formula_1_etl/dlt/01_bronze/)
+*   **Silver**: [`formula_1_etl/dlt/02_silver/`](../formula_1_etl/dlt/02_silver/)
+*   **Gold**: [`formula_1_etl/dlt/03_gold/`](../formula_1_etl/dlt/03_gold/)
+
+### Python Scripts
+
+The Python Scripts implementation moves logic out of notebooks into proper Python modules, facilitating better testing, modularity, and version control.
+
+**Configuration**: [`resources/formula_1_etl_pipeline_py.job.yml`](../resources/formula_1_etl_pipeline_py.job.yml)
+
+**Script Locations**:
+*   **Bronze**: [`formula_1_etl/scripts/01_bronze/`](../formula_1_etl/scripts/01_bronze/)
+*   **Silver**: [`formula_1_etl/scripts/02_silver/`](../formula_1_etl/scripts/02_silver/)
+*   **Gold**: [`formula_1_etl/scripts/03_gold/`](../formula_1_etl/scripts/03_gold/)
+
 ## Shared Utilities
 
 Located in [src/formula1/](../src/formula1/):
@@ -338,8 +365,14 @@ dbutils.notebook.run("./2.bronze_races", 0, {"p_data_source": "ergast"})
 # Deploy resources
 databricks bundle deploy --target dev
 
-# Run ingestion job (Development)
-databricks bundle run formula1_ingestion_job --target dev
+# 1. Run Standard Notebook Pipeline
+databricks bundle run formula_1_etl_pipeline_nb --target dev
+
+# 2. Run Python Scripts Pipeline
+databricks bundle run formula_1_etl_pipeline_py --target dev
+
+# 3. Run Delta Live Tables Pipeline
+databricks bundle run formula_1_etl_pipeline --target dev
 ```
 
 ---
