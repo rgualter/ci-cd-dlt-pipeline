@@ -14,6 +14,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_races
           notebook_task:
@@ -25,6 +27,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_constructors
           notebook_task:
@@ -36,6 +40,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_drivers
           notebook_task:
@@ -47,6 +53,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_results
           notebook_task:
@@ -58,6 +66,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_pit_stops
           notebook_task:
@@ -69,6 +79,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_lap_times
           notebook_task:
@@ -80,6 +92,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 01_bronze_qualifying
           notebook_task:
@@ -91,6 +105,8 @@ resources:
               processed_timestamp: "{{job.start_time.iso_datetime}}"
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         # Silver Layer Tasks - depend on all bronze
         - task_key: 02_silver_circuits
@@ -101,6 +117,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_races
           depends_on:
@@ -110,6 +128,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_constructors
           depends_on:
@@ -119,6 +139,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_drivers
           depends_on:
@@ -128,6 +150,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_results
           depends_on:
@@ -137,6 +161,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_pit_stops
           depends_on:
@@ -146,6 +172,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_lap_times
           depends_on:
@@ -155,6 +183,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 02_silver_qualifying
           depends_on:
@@ -164,6 +194,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         # Gold Layer Tasks - depend on all silver
         - task_key: 03_gold_race_results
@@ -178,6 +210,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 03_gold_driver_standings
           depends_on:
@@ -187,6 +221,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
         - task_key: 03_gold_constructor_standings
           depends_on:
@@ -196,6 +232,8 @@ resources:
             base_parameters:
               catalog: "${var.catalog}"
             source: WORKSPACE
+          libraries:
+            - whl: ../dist/*.whl
           job_cluster_key: standard_d4s_v3_cluster_id
       job_clusters:
         - job_cluster_key: standard_d4s_v3_cluster_id
